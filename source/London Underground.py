@@ -75,6 +75,7 @@ def connection_read(stations):
 def manual_traversal(stations):
     station = stations[str(random.randint(1, 306))]
     traversal = True
+    print("Type 'x' at any time to exit")
     while traversal == True:
         print("You are at "+(station.get_name()).strip('"'))
         print("From here you can travel to: ")
@@ -84,13 +85,36 @@ def manual_traversal(stations):
             print(str(number)+". "+str(x.get_name()))
             options[number] = x
             number +=1
-        choice = int(input())
-        station = options[choice]
+        choice = (input())
+        if choice == "x" or choice == "X":
+            traversal = False
+        else:
+            station = options[int(choice)]
 
+def BFS(stations):
+    station = stations[str(random.randint(1, 306))]
+    #station = stations["192"]
+    visit_list = []
+    visited = []
+    count = 0
+    while count != 305:
+        count +=1
+        if station not in visited:
+            visited.append(station)
+            
+        for x in station.get_stations():
+            #treating 'visit_list' as a queue
+            if x not in visited and x not in visit_list:
+                visit_list.append(x)
+                
+            else:
+                pass
+        try:
+            station = visit_list.pop(0)
+        except:
+            print(count)
 
-
-
-
+        
 
 
 
@@ -98,4 +122,5 @@ def manual_traversal(stations):
 
 stations = station_read()
 connection_read(stations)
+BFS(stations)
 manual_traversal(stations)
