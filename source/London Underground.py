@@ -32,6 +32,20 @@ class Station():
     def get_ID(self):
         return(self.ID)
 
+def makeToGraph():
+    graph = {}
+    stations = station_graph()
+    connections = connection_graph()
+    print(connections)
+    #making graph
+    for x in stations:
+        graph[x] = connections[x]
+    return(graph)
+    
+
+
+
+
 def searchForLeastCost(costs, processed):
     lowestCost = math.inf
     lowestCostNode = None
@@ -86,10 +100,11 @@ def dijkstra(graph, startNode):
         node = searchForLeastCost(costs, processed)
     return(parents, costs, processed)
         
-def dijksta_main(stations, station, target):
+def dijkstra_main(station, target):
+    graph = makeToGraph()
+    stations = station_graph()
     if station == 0:
-        station = 0
-    target = "End"
+        station = station[random.randint(1,307)]
     #make graph
     graph = {}
     #nodes
@@ -105,7 +120,7 @@ def dijksta_main(stations, station, target):
     graph["B"]["End"] = 5
 
     #use dijkstras
-    parents, costs, processed = dijkstra(graph, "Start")
+    parents, costs, processed = dijkstra(graph, station)
     #give answer
     travelList = [target]
     parent = parents[target]
@@ -135,7 +150,19 @@ def station_read():
         line = x.split(",")
         station = Station(line[0], line[3], line[1], line[2], line[5])
         stations[line[0]] = station
-    return(stations)            
+    return(stations)
+
+#reads stations in and turns them into dict
+def station_graph():
+    stations = {}
+    f = open("station_data.csv","r")
+    file = f.read()
+    file = file.split("\n")
+    file.pop(0)
+    for x in file:
+        station_split = x.split(",")
+        stations[station_split[0]] = station_split[3] 
+    return(stations)  
 
 #reads the line_data file to create a dictionary of every line
 def line_read():
@@ -167,8 +194,27 @@ def connection_read(stations):
             station2.add_station(station1, line[2], line[3])
         except:
             pass
-    
 
+#reads in connections and turns them into a dict
+def connection_graph():
+    connections = {}
+    f = open("london.connections.csv","r")
+    file = f.read()
+    file = file.split("\n")
+    file.pop(0)
+    file.pop(len(file)-1)
+    for x in file:
+        line = x.split(",")
+        dicti = {}
+        if line[0] in connections:
+            dicti = connections[line[0]]
+            dicti[line[1]] = line[3]
+            connections[line[0]] = dicti
+        else:
+            dicti[line[1]] = line[3]
+            connections[line[0]] = dicti
+    return(connections)
+    
 
 #allows the user to 'move' through the stations
 def manual_traversal(stations, station=0):
@@ -311,7 +357,6 @@ def manual_search(stations):
 def main_menu():
     station = 0
     stations = station_read()
-    print((stations))
     connection_read(stations)
     print("Welcome to the London Underground Program by Miles Burne")
     while True:
@@ -342,7 +387,7 @@ def main_menu():
                 input_loop = False
             elif choice == "5":
                 target = input("Please enter a target station name\n")
-                dijkstra_main(stations, station)
+                dijkstra_main(station, target)
                 input_loop = False
                 print()
             elif choice == "6":
