@@ -36,7 +36,6 @@ def makeToGraph():
     graph = {}
     stations = station_graph()
     connections = connection_graph()
-    print(connections)
     #making graph
     for x in stations:
         graph[x] = connections[x]
@@ -104,7 +103,7 @@ def dijkstra_main(station, target):
     graph = makeToGraph()
     stations = station_graph()
     if station == 0:
-        station = station[random.randint(1,307)]
+        station = stations[random.randint(1,307)]
     #make graph
     graph = {}
     #nodes
@@ -210,9 +209,25 @@ def connection_graph():
             dicti = connections[line[0]]
             dicti[line[1]] = line[3]
             connections[line[0]] = dicti
+            dicti = {}
+            if line[1] in connections:
+                dicti = connections[line[1]]
+                dicti[line[0]] = line[3]
+                connections[line[1]] = dicti
+            else:
+                dicti[line[0]] = line[3]
+                connections[line[1]] = dicti
         else:
             dicti[line[1]] = line[3]
             connections[line[0]] = dicti
+            dicti = {}
+            if line[1] in connections:
+                dicti = connections[line[1]]
+                dicti[line[0]] = line[3]
+                connections[line[1]] = dicti
+            else:
+                dicti[line[0]] = line[3]
+                connections[line[1]] = dicti
     return(connections)
     
 
