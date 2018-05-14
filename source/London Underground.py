@@ -46,16 +46,23 @@ def makeToGraph():
 
 
 def searchForLeastCost(costs, processed):
-    lowestCost = math.inf
+    '''
+    #lowestCost = math.inf
     lowestCostNode = None
+    print(costs)
     for node in costs:
         cost = costs[node]
         #check if cheapest
+        print(type(cost))
+        print(type(lowestCost))
+        print(cost, lowestCost)
         if cost < lowestCost and node not in processed:
             lowestCost = cost
             lowestCostNode = node
     return(lowestCostNode)
+'''
 
+    
 def formulate(graph, startNode):
     costs = {}
     parents = {}
@@ -101,22 +108,9 @@ def dijkstra(graph, startNode):
         
 def dijkstra_main(station, target):
     graph = makeToGraph()
-    stations = station_graph()
     if station == 0:
-        station = stations[random.randint(1,307)]
-    #make graph
-    graph = {}
-    #nodes
-    graph["Start"] = {}
-    graph["A"] = {}
-    graph["B"] = {}
-    graph["End"] = {}
-    #node connections
-    graph["Start"]["A"] = 6
-    graph["Start"]["B"] = 2
-    graph["A"]["End"] = 1
-    graph["B"]["A"] = 3
-    graph["B"]["End"] = 5
+        station = str(random.randint(1,307))
+        #station = stations[str(random.randint(1,307))]
 
     #use dijkstras
     parents, costs, processed = dijkstra(graph, station)
